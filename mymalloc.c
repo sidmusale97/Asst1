@@ -11,18 +11,31 @@
 #include "mymalloc.h"
 
 void initialize(){
-    freeList->size = 5000 - sizeof(metaData);
-    freeList->isFree = 1;
-    freeList->next = NULL;
+    memoryArray->size = 5000 - sizeof(metaData);
+    memoryArray->isFree = 1;
+    memoryArray->next = NULL;
 }
 
-void split(metaData *allocatedSlot, int size){
-    metaData *temp = (char*)((char*)allocatedSlot->size + size + sizeof(metaData));
-    temp->size = allocatedSlot->size - size - sizeof(metaData);
-    temp->isFree = 1;
-    temp->next = allocatedSlot->next;
-    allocatedSlot->size = size;
-    allocatedSlot->isFree = 0;
-    allocatedSlot->next = temp;
-}
 
+//if first block found is greater than required size, then split
+char* split(metaData *allocatedBlock, int requiredSize){
+    metaData *requiredBlock = (char*)(char*) requiredSize + sizeof(metaData) ;
+    requiredBlock->size = requiredSize;
+    allocatedBlock->size = allocatedBlock->size - requiredSize - sizeof(metaData);
+    requiredBlock->isFree = 0; //slot is not longer free
+    allocatedBlock->isFree = 1; //allocated slot is still free
+    requiredBlock->next = allocatedBlock;
+    allocatedBlock->next = NULL;
+    return requiredBlock;
+}
+char* MyMalloc(int size){
+    metaData *current, *previous;
+    while(((current->size < size) || (current->isFree == 0)) && (current->next != NULL)){
+        previous = current;
+        current = current ->next;
+    }
+    if(current->size == size){
+        return previous;
+    }else{
+        split(current, size);
+    }
