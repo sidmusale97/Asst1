@@ -19,7 +19,7 @@ typedef struct metaData{
     struct metaData *next;  //pointer to next block
 }metaData;
 
-metaData *freeList = (char*) myblock;
+metaData *memoryArray = (char*) myblock;
 
 
 
