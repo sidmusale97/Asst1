@@ -1,30 +1,28 @@
-#include "mymalloc.h"
-#include <ctype.h>
-static char myblock[5000];
-void * mymalloc(int size);
-int findIndex(int size);
+//
+//  mymalloc.c
+//  Asst1
+//
+//  Created by Ridhima Sakhuja on 2/4/18.
+//  Copyright © 2018 Ridhima Sakhuja. All rights reserved.
+//
 
-int main()
-{
-	mymalloc(5);
+#include<stdio.h>
+#include<stddef.h>
+#include "mymalloc.h"
+
+void initialize(){
+    freeList->size = 5000 - sizeof(metaData);
+    freeList->isFree = 1;
+    freeList->next = NULL;
 }
-char * mymalloc(int size)
-{
-	if (size == 0)
-		return 
-	for(i = 0; i <5000; i++)
-	{
-		if (isdigit(myblock[i]))//if header byte found
-		{
-			i = i + myblock[i];	//jump past reserved bytes
-			if(i > 5000)return -1;//if jump is out of bounds return error
-			continue;
-		}
-		else
-		{
-			if((i + size) > 5000)return -1;//if index found but requested memory is out of bounds
-			myblock[i] = size;
-		}
-	}
-	return *myblock[i]; 
+
+void split(metaData *allocatedSlot, int size){
+    metaData *temp = (char*)((char*)allocatedSlot->size + size + sizeof(metaData));
+    temp->size = allocatedSlot->size - size - sizeof(metaData);
+    temp->isFree = 1;
+    temp->next = allocatedSlot->next;
+    allocatedSlot->size = size;
+    allocatedSlot->isFree = 0;
+    allocatedSlot->next = temp;
 }
+
