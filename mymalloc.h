@@ -8,17 +8,19 @@
 
 
 #include <stdio.h>
+#include<stddef.h>
 
 
 static char myblock[5000];  //array size simulated
 
-typedef struct subBlock{
+typedef struct metaData{
     int size; //size of data
-    int free;       //flag to indicate if block is empty or not
-    struct subBlock *next;  //pointer to next block
-}subBlock;
+    int isFree;       //flag to indicate if block is empty or not: 0 = not empty, 1 = empty
+    struct metaData *next;  //pointer to next block
+}metaData;
 
-subBlock *memory = (char*) myblock; //points to first block of memory
+metaData *freeList = (char*) myblock;
+
 
 
 
