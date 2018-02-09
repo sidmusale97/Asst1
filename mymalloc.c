@@ -17,15 +17,14 @@ void initialize(){
 }
 
 //if first block found is greater than required size, then split
-char* allocate(metaData *allocatedBlock, int requiredSize){
-    metaData *requiredBlock = (char*)(requiredSize + sizeof(metaData)) ;
-    requiredBlock->size = requiredSize;
-    allocatedBlock->size = allocatedBlock->size - requiredSize - sizeof(metaData);
-    requiredBlock->isFree = 0; //slot is still free
-    allocatedBlock->isFree = 1; //allocated slot is no longer free
-    requiredBlock->next = allocatedBlock;
-    allocatedBlock->next = NULL;
-    return requiredBlock;
+void allocate(metaData *largeBlock, int requiredSize){
+    metaData *newBlock = (void*)((void *)largeBlock + requiredSize + sizeof(metaData));//new block is pointing to the space after the metadata and required space of large block
+    newBlock->size = largeBlock->size - requiredSize - sizeof(metaData);//new block size is equal to how much space is left in large block after required space and metadata are inserted in
+    largeBlock->size = requiredSize; //large block now becomes just a small block with size equal to its required size
+    newBlock->isFree = 0; //slot is still free
+    largeBlock->isFree = 1; //large slot is no longer free becuase it has been previously malloced
+    newBlock->next = largeBlock->next; //newblock is now "after" large block in the mem LL so it should inherit large block's next node
+    largeBlock->next = newBlock; //large block is now "before" new block so its next node is new block
 }
 
 void* my_malloc(int size){
