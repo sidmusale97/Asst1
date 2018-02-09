@@ -19,7 +19,7 @@ typedef struct metaData{
     struct metaData *next;  //pointer to next block
 }metaData;
 
-metaData *blockPtr = (char*) myblock;  //sets pointer to first index in array
+metaData *blockPtr = (void*) myblock;  //sets pointer to first index in array
 
 
 
