@@ -20,8 +20,11 @@ typedef struct metaData{
 }metaData;
 
 metaData *blockPtr = (void*) myblock;  //sets pointer to first index in array
-
-
+void initialize();
+char* allocate(metaData *allocatedBlock, int requiredSize);
+void* my_malloc(int size);
+void merge();
+void my_free(metaData * p);
 
 
 
