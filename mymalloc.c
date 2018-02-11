@@ -1,11 +1,3 @@
-//
-//  mymalloc.c
-//  Asst1
-//
-//  Created by Ridhima Sakhuja on 2/4/18.
-//  Copyright © 2018 Ridhima Sakhuja. All rights reserved.
-//
-
 #include<stdio.h>
 #include<stddef.h>
 #include "mymalloc.h"
@@ -41,13 +33,15 @@ void* my_malloc(int size)
     {
     	current->isFree = 0;
     	printf("%s", "Space has been allocated\n");
-        return (void *)++current;
+    	current++; //move the current pointer past all the metaData and have it point to beginning of the allocated space
+        return (void *)current;
     }
     else if (current->size >(size + sizeof(metaData)))
     {
       	allocate(current, size);
       	printf("%s", "Space has been allocated\n");
-      	return (void *)++current;
+      	current++; //move the current pointer past all the metaData and have it point to beginning of the allocated space
+      	return (void *)current;
     }
     else
     {
@@ -74,17 +68,16 @@ void merge(){
 
 }
 void my_free(void* p){
-	if(((void *)myblock <= p) && ((void*)(myblock + 5000) >= p))
+	if(((void *)myblock > p) && ((void*)(myblock + 5000) < p))
+	{
+		puts("invalid pointer");
+	}
+	else
 	{
 		metaData * current = p;
 		current--;
 		current->isFree = 1;
 		//merge();
-	}
-	else
-	{
-		puts("Invalid pointer");
-		return;
 	}
 
 }
