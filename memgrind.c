@@ -3,22 +3,21 @@
 #include "mymalloc.c"
 int main()
 {
-	int * arr = (int*)my_malloc(1000);
-	int i;
-	for (i = 0; i <5;i++)
+    int i;
+	for(i = 0; i < 150; i++)
     {
-        arr[i] = i;
-        printf("arr[%d] = %d\n", arr[i], i);
+        char * byte = (char *)my_malloc(1);
+        free(byte);
     }
-    int * hi = (int*)my_malloc(2500);
-    for (i = 0; i <50;i++)
+    char * ptrs[150];
+    for(i = 0; i < 150;i++)
     {
-        hi[i] = 2*i;
-        printf("hi[%d] = %d\n", i, hi[i]);
+        ptrs[i] = my_malloc(1);
     }
-    my_free(hi);
-    char  * cool = (char*)my_malloc(3000);
-    cool = "hello";
-    puts(cool);
+    for(i = 0;i < 150;i++)
+    {
+        my_free(ptrs[i]);
+    }
+
 
 }
