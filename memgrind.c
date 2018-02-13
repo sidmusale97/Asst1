@@ -17,7 +17,8 @@ int main()
         printf("hi[%d] = %d\n", i, hi[i]);
     }
     my_free(hi);
-    char  * cool = (char*)my_malloc(2500);
+    char  * cool = (char*)my_malloc(3000);
     cool = "hello";
     puts(cool);
+
 }

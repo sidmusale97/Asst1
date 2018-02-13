@@ -52,32 +52,37 @@ void* my_malloc(int size)
 
 
 void merge(){
-    metaData *current = myblock;
-    metaData *prev = NULL;
-    while(current->next != NULL){
+    metaData *current = blockPtr->next;
+    metaData *prev = blockPtr;
+    do{
         if((current->isFree) && (prev->isFree)){
+        prev->size = prev->size + current->size + sizeof(metaData);
+        prev->isFree = 1;
+        current=current->next;
+        }
+        else
+        {
             prev = current;
             current = current->next;
         }
-        prev->size = prev->size + current->size + sizeof(metaData);
-        prev->isFree = 1;
-        current = current->next;
-        prev->next = current;
-    }
-    printf("%s", "MERGED");
+
+    }while(current != NULL);
+
+    printf("%s", "MERGED\n");
 
 }
 void my_free(void* p){
-	if(((void *)myblock > p) && ((void*)(myblock + 5000) < p))
+	if(((void *)myblock > p) || ((void*)(myblock + 5000) < p))
 	{
 		puts("invalid pointer");
+		return;
 	}
 	else
 	{
 		metaData * current = p;
 		current--;
 		current->isFree = 1;
-		//merge();
+		merge();
 	}
 
 }
