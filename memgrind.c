@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "mymalloc.c"
+#include "mymalloc.h"
 int main()
 {
     int i;
