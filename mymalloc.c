@@ -59,6 +59,8 @@ void merge(){
         prev->size = prev->size + current->size + sizeof(metaData);
         prev->isFree = 1;
         current=current->next;
+        printf("%s", "MERGED\n");
+        break;
         }
         else
         {
@@ -68,7 +70,6 @@ void merge(){
 
     }while(current != NULL);
 
-    printf("%s", "MERGED\n");
 
 }
 void my_free(void* p){
@@ -82,7 +83,20 @@ void my_free(void* p){
 		metaData * current = p;
 		current--;
 		current->isFree = 1;
+		puts("FREEEEEEEEE");
 		merge();
+		return;
 	}
 
+}
+void printblocks()
+{
+    metaData * p = blockPtr;
+    int counter = 1;
+    while(p!=NULL)
+    {
+        printf("Block %d: size: %d", counter, p->size);
+        counter++;
+        p = p->next;
+    }
 }
