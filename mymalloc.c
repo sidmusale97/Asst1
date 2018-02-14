@@ -83,7 +83,6 @@ void my_free(void* p){
 		metaData * current = p;
 		current--;
 		current->isFree = 1;
-		puts("FREEEEEEEEE");
 		merge();
 		return;
 	}

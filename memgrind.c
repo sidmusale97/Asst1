@@ -18,9 +18,8 @@ int main()
     {
         my_free(ptrs[i]);
     }
-    for(i = 0; i < 50;i++)
     int counter = 0;
-    while(c < 150)
+    /*while(counter < 150)
     {
         int r = rand()%2;
 
@@ -30,5 +29,6 @@ int main()
             ptrs[rand()%150] = my_malloc()
         }
     }
+    */
 }
 
