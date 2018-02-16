@@ -81,7 +81,7 @@ int main()
 //    }
 //}
 
-//Workload E: Malloc randomly size chunk random number of times (size of chunk stays consistent) and free
+//Workload E: Malloc randomly sized chunk random number of times (size of chunk stays consistent) and free
     
 //    char* ptr = NULL;
 //    int mallocSize = rand()%5000;    //size of malloc chunks
@@ -98,6 +98,18 @@ int main()
 //        mallocCounter --;
 //    }
     
-    //Workload F: 
+//Workload F: Malloc random number of times, free half that number of times - continue 150 times
+    int mallocCounter = rand()%150;
+    int counter = 0;
+    char* ptr = NULL;
+    while(counter != mallocCounter){
+        ptr = my_malloc(1);
+        counter++;
+    }
+    counter = 0;
+    while(counter != (mallocCounter * .5)){
+        my_free(ptr);
+        counter++;
+    }
 }
 
