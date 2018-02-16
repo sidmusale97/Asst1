@@ -51,33 +51,53 @@ int main()
      }*/
     
     //Workload D: Randomly-sized malloc() or free() pointers
-    int mallocSize = 0; //size of malloc bytes
-    int operation = 0;  //determines free or malloc
-    int mallocCounter = 0;     //keeps track of total number of mallocs
-    int pointersMalloc = 0; //keeps track of number of current pointers malloc
-    char *ptr = NULL;
-    while(mallocCounter <= 5000){
-        if(mallocCounter ==0 || pointersMalloc ==0){
-            mallocSize = rand()%64;
-            ptr= my_malloc(mallocSize);
-            mallocCounter++;
-            pointersMalloc++;
-        }
-        operation = rand()%2;
-        if(operation ==1){
-            mallocSize = rand()%64;
-            ptr= my_malloc(mallocSize);
-            mallocCounter++;
-            pointersMalloc++;
-        }else{
-            my_free(ptr);
-            pointersMalloc--;
-        }
-    }
-    while(pointersMalloc >0){
-        my_free(ptr);
-        pointersMalloc--;
-    }
-}
+    
+//    int mallocSize = 0; //size of malloc bytes
+//    int operation = 0;  //determines free or malloc
+//    int mallocCounter = 0;     //keeps track of total number of mallocs
+//    int pointersMalloc = 0; //keeps track of number of current pointers malloc
+//    char *ptr = NULL;
+//    while(mallocCounter <= 5000){
+//        if(mallocCounter ==0 || pointersMalloc ==0){
+//            mallocSize = rand()%64;
+//            ptr= my_malloc(mallocSize);
+//            mallocCounter++;
+//            pointersMalloc++;
+//        }
+//        operation = rand()%2;
+//        if(operation ==1){
+//            mallocSize = rand()%64;
+//            ptr= my_malloc(mallocSize);
+//            mallocCounter++;
+//            pointersMalloc++;
+//        }else{
+//            my_free(ptr);
+//            pointersMalloc--;
+//        }
+//    }
+//    while(pointersMalloc >0){
+//        my_free(ptr);
+//        pointersMalloc--;
+//    }
+//}
 
+//Workload E: Malloc randomly size chunk random number of times (size of chunk stays consistent) and free
+    
+//    char* ptr = NULL;
+//    int mallocSize = rand()%5000;    //size of malloc chunks
+//    int mallocCounter = rand()%150;    //total number of malloc sizes (must be b/w 1 and 150)
+//    int remainingSize = mallocSize;     //remaining size of memory after each chunk is malloc
+//    int counter = 0;
+//    while(counter != mallocCounter || (remainingSize < mallocSize)){
+//        ptr = my_malloc(mallocSize);
+//        remainingSize = 5000 - remainingSize;
+//        counter++;
+//     }
+//    while(mallocCounter >0){
+//        my_free(ptr);
+//        mallocCounter --;
+//    }
+    
+    //Workload F: 
+}
 
