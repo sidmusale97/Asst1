@@ -80,8 +80,12 @@ void my_free(void* p){
     }
     else
     {
-        metaData * current = p;
+        metaData* current = p;
         current--;
+        if(current-> isFree){
+            puts("Invalid Pointer");
+            return;
+        }
         current->isFree = 1;
         merge();
         return;
