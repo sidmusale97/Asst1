@@ -21,11 +21,11 @@ void allocate(metaData *largeBlock, int requiredSize){
 //
 void* my_malloc(int size)
 {
-    if(!blockPtr->isFree)initialize();//executes when the isFree value in the structure is NULL. This only happens once.
+    if(!blockPtr->size)initialize();//executes when the isFree value in the structure is NULL. This only happens once.
     metaData *current = blockPtr;
     while(current != NULL)
     {
-    if(current->size == size && current->isFree)
+    if((current->size == size) && current->isFree)
     {
         current->isFree = 0;
         printf("%s", "Space has been allocated\n");
@@ -64,6 +64,7 @@ void merge(){
             current = current->next;
         }
     }
+
 }
 void my_free(void* p){
     if(((void *)myblock > p) || ((void*)(myblock + 5000) < p))
@@ -103,7 +104,7 @@ void freeall()
     while (p != NULL)
     {
         if(!(p->isFree))
-            my_free(++p);
+        my_free(++p);
         p = p->next;
     }
     merge();
