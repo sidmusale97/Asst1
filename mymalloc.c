@@ -23,13 +23,9 @@ void* my_malloc(int size)
 {
     if(!blockPtr->isFree)initialize();//executes when the isFree value in the structure is NULL. This only happens once.
     metaData *current = blockPtr;
-    metaData*previous;
-    while(((current->size < size) || !(current->isFree)) && (current->next != NULL))
+    while(current != NULL)
     {
-        previous = current;
-        current = current ->next;
-    }
-    if(current->size == size)
+    if(current->size == size && current->isFree)
     {
         current->isFree = 0;
         printf("%s", "Space has been allocated\n");
@@ -43,34 +39,31 @@ void* my_malloc(int size)
         current++; //move the current pointer past all the metaData and have it point to beginning of the allocated space
         return (void *)current;
     }
-    else
-    {
-        puts("Not enough space. Malloc error");
-        return NULL;
+    current = current->next;
     }
+    puts("Not enough memory. Malloc error");
+    return NULL;
 }
 //
 
 void merge(){
     metaData *current = blockPtr->next;
     metaData *prev = blockPtr;
-    do{
+    while(current != NULL)
+    {
         if((current->isFree) && (prev->isFree)){
             prev->size = prev->size + current->size + sizeof(metaData);
             prev->isFree = 1;
             current=current->next;
+            prev->next = current;
             printf("%s", "MERGED\n");
-            break;
         }
         else
         {
             prev = current;
             current = current->next;
         }
-        
-    }while(current != NULL);
-    
-    
+    }
 }
 void my_free(void* p){
     if(((void *)myblock > p) || ((void*)(myblock + 5000) < p))
@@ -90,7 +83,7 @@ void my_free(void* p){
         merge();
         return;
     }
-    
+
 }
 void printblocks()
 {
@@ -98,9 +91,22 @@ void printblocks()
     int counter = 1;
     while(p!=NULL)
     {
-        printf("Block %d: size: %d", counter, p->size);
+        printf("Block %d: size: %d  Free:%d\n", counter, p->size, p->isFree);
         counter++;
         p = p->next;
     }
 }
+
+void freeall()
+{
+    metaData * p = blockPtr;
+    while (p != NULL)
+    {
+        if(!(p->isFree))
+            my_free(++p);
+        p = p->next;
+    }
+    merge();
+}
+
 

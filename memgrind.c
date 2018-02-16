@@ -1,57 +1,83 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "mymalloc.h"
+#include "mymalloc.c"
 int main()
 {
     //Workload A: Malloc() 1 byte and immediately free it x150
-    
-    /*int i;
+     int i;
+     void * a = my_malloc(5);
+     void * b = my_malloc(5);
+     void * c = my_malloc(5);
+     void * d = my_malloc(5);
+     printblocks();
+     /*
      for (i = 0; i < 150;i++)
      {
      void * p = my_malloc(1);
      my_free(p);
-     } */
-    
+     }
+     */
     //Workload B: Malloc(), store pointer in arrayx150 times
-    
-    /*  char * ptrs[150];
+     /*char * ptrs[10];
      for(i = 0; i < 150;i++)
      {
      ptrs[i] = my_malloc(1);
+     printblocks();
      }
-     for(i = 0;i < 150;i++)
-     {
-     my_free(ptrs[i]);
-     }*/
-    
+     freeall();
+     printblocks();
+     */
     //Workload C: Randomly choose b/w 1 byte malloc and 1 byte free, continue until 150 mallocs
-    
-    /*int mallocCounter = 0;  //counts total number of mallocs
-     int pointersMalloc = 0; //counts pointers currently malloc
+
+     /*int mallocCounter = 0;  //counts total number of mallocs
      char*p = NULL;
      while(mallocCounter <= 150){
-     if(pointersMalloc == 0){ //if no byte has been allocated, then first malloc
-     p = my_malloc(1);
-     mallocCounter++;
-     pointersMalloc++;
+        if(mallocCounter == 0){ //if no byte has been allocated, then first malloc
+            p = my_malloc(1);
+            mallocCounter++;
+            if (mallocCounter >= 150)break;
+        }
+        int r = rand()%2;
+        if(r==1){           //if r = 1 malloc 1 byte
+            p = my_malloc(1);
+            mallocCounter++;
+            if (mallocCounter >= 150)break;
+        }
+        else
+            {
+                metaData * a = blockPtr;
+                while (a != NULL)
+                    {
+                    if(!(a->isFree))
+                    {
+                        my_free(++a);
+                        break;
+                    }
+                    a = a->next;
+                    }
+            }
      }
-     int r = rand()%2;
-     if(r==1){           //if r = 1 malloc 1 byte
-     p = my_malloc(1);
-     mallocCounter++;
-     pointersMalloc++;
-     }else{
-     my_free(p);     //if r=0 free byte
-     pointersMalloc--;
+     metaData * b = blockPtr;
+     while (b != NULL)
+     {
+         printf("%d\t", b->isFree);
+         b = b->next;
      }
+     /*while (b != NULL)
+     {
+         puts("HERE");
+         if(!(b->isFree))
+         {
+             my_free(++b);
+         }
+         b--;
+         b = b->next;
+
      }
-     while(pointersMalloc!=0){  // after 150 mallocs, free
-     my_free(p);
-     pointersMalloc--;
-     }*/
-    
+*/
+
     //Workload D: Randomly-sized malloc() or free() pointers
-    
+
 //    int mallocSize = 0; //size of malloc bytes
 //    int operation = 0;  //determines free or malloc
 //    int mallocCounter = 0;     //keeps track of total number of mallocs
@@ -82,7 +108,7 @@ int main()
 //}
 
 //Workload E: Malloc randomly sized chunk random number of times (size of chunk stays consistent) and free
-    
+
 //    char* ptr = NULL;
 //    int mallocSize = rand()%5000;    //size of malloc chunks
 //    int mallocCounter = rand()%150;    //total number of malloc sizes (must be b/w 1 and 150)
@@ -97,7 +123,7 @@ int main()
 //        my_free(ptr);
 //        mallocCounter --;
 //    }
-    
+
 //Workload F: Malloc random number of times, free half that number of times - continue 150 times
 //    int mallocCounter = rand()%150;
 //    int counter = 0;
@@ -111,9 +137,6 @@ int main()
 //        my_free(ptr);
 //        counter++;
 //    }
-    
-    char *p = (char*)my_malloc(100);
-    my_free(p);
-    my_free(p);
+    return 0;
 }
 

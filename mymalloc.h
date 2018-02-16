@@ -26,6 +26,7 @@ void* my_malloc(int size);
 void merge();
 void my_free(void * p);
 void printblocks(void);
+void freeall();
 
 
 
