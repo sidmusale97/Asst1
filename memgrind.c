@@ -99,17 +99,21 @@ int main()
 //    }
     
 //Workload F: Malloc random number of times, free half that number of times - continue 150 times
-    int mallocCounter = rand()%150;
-    int counter = 0;
-    char* ptr = NULL;
-    while(counter != mallocCounter){
-        ptr = my_malloc(1);
-        counter++;
-    }
-    counter = 0;
-    while(counter != (mallocCounter * .5)){
-        my_free(ptr);
-        counter++;
-    }
+//    int mallocCounter = rand()%150;
+//    int counter = 0;
+//    char* ptr = NULL;
+//    while(counter != mallocCounter){
+//        ptr = my_malloc(1);
+//        counter++;
+//    }
+//    counter = 0;
+//    while(counter != (mallocCounter * .5)){
+//        my_free(ptr);
+//        counter++;
+//    }
+    
+    char *p = (char*)my_malloc(100);
+    my_free(p);
+    my_free(p);
 }
 
