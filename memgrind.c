@@ -86,11 +86,11 @@ int main()
          char *ptrE =NULL;
         mallocSize = rand()%5000;    //size of malloc chunks
         mallocCounter = rand()%25;    //total number of malloc sizes (must be b/w 1 and 150)
-        int remainingSize = mallocSize;     //remaining size of memory after each chunk is malloc
+        int remainingSize = 5000;     //remaining size of memory after each chunk is malloc
         int counter = 0;
         while(counter != mallocCounter || (remainingSize < mallocSize)){
             ptrE = my_malloc(mallocSize);
-            remainingSize = 5000 - remainingSize;
+            remainingSize = remainingSize - mallocSize;
             counter++;
          }
         while(mallocCounter >0){
