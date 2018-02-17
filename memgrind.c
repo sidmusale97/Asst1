@@ -4,12 +4,6 @@
 int main()
 {
     int i;
-    void * a = my_malloc(1);
-    void * b = my_malloc(5);
-    void * c = my_malloc(10);
-    printblocks();
-    my_free(c);
-    printblocks();
     //Workload A: Malloc() 1 byte and immediately free it x150
     /*
      for (i = 0; i < 150;i++)
@@ -19,13 +13,13 @@ int main()
      }
      */
     //Workload B: Malloc(), store pointer in arrayx150 times
-    /*char * ptrs[10];
-     for(i = 0; i < 10;i++)
+     char * ptrs[150];
+     for(i = 0; i < 150;i++)
      {
      ptrs[i] = my_malloc(1);
      }
+     freeall();
      printblocks();
-     */
     //Workload C: Randomly choose b/w 1 byte malloc and 1 byte free, continue until 150 mallocs
     /*
      int mallocCounter = 0;  //counts total number of mallocs
@@ -56,9 +50,9 @@ int main()
                     }
             }
      }
-    freeall();
-*/
-
+     freeall();
+    printblocks();
+    */
     //Workload D: Randomly-sized malloc() or free() pointers
 
 //    int mallocSize = 0; //size of malloc bytes

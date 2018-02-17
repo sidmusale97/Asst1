@@ -104,10 +104,13 @@ void freeall()
     while (p != NULL)
     {
         if(!(p->isFree))
-        my_free(++p);
+        {
+            my_free(++p);
+            p--;
+        }
+
         p = p->next;
     }
-    merge();
 }
 
 
