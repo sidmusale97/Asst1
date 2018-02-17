@@ -1,10 +1,7 @@
 //
 //  mymalloc.h
 //  Asst1
-//
-//  Created by Ridhima Sakhuja on 2/4/18.
-//  Copyright © 2018 Ridhima Sakhuja. All rights reserved.
-//
+
 
 
 #include <stdio.h>
