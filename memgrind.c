@@ -1,9 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mymalloc.c"
+
+void workloadA();
+void workloadB();
+void workloadC();
+void workloadD();
+void workloadE();
+
 int main()
 {
-    void * p = malloc(5000);
+    workloadD();
     return 0;
 }
     //Workload A: Malloc() 1 byte and immediately free it x150
@@ -31,17 +38,21 @@ int main()
     //Workload C: Randomly choose b/w 1 byte malloc and 1 byte free, continue until 150 mallocs
     void workloadC(){
      int mallocCounter = 0;  //counts total number of mallocs
-     char*p = NULL;
+     int canFree = 0;
+     void*p = NULL;
      while(mallocCounter <= 150){
-        if(mallocCounter == 0){ //if no byte has been allocated, then first malloc
+        if(!canFree){ //if no byte has been allocated, then first malloc
             p = malloc(1);
             mallocCounter++;
+            canFree++;
             if (mallocCounter >= 150)break;
+            continue;
         }
         int r = rand()%2;
         if(r==1){           //if r = 1 malloc 1 byte
             p = malloc(1);
             mallocCounter++;
+            canFree++;
             if (mallocCounter >= 150)break;
         }
         else
@@ -52,6 +63,7 @@ int main()
                     if(!(a->isFree))
                     {
                         free(++a);
+                        canFree--;
                         break;
                     }
                     a = a->next;
@@ -59,7 +71,6 @@ int main()
             }
             printblocks();
      }
-     printblocks();
      freeall();
     }
     //Workload D: Randomly-sized malloc() or free() pointers
@@ -67,20 +78,28 @@ int main()
     int mallocSize = 0; //size of malloc bytes
     int operation = 0;  //determines free or malloc
     int mallocCounter = 0;     //keeps track of total number of malloc
-    char * ptr = NULL;
+    int canFree = 0;
+    int remainingSize = blockPtr->size;
+    void * ptr = NULL;
     while(mallocCounter < 150){
-        if(mallocCounter == 0){
-            mallocSize = rand()%64;
-            ptr= malloc(mallocSize);
-            mallocCounter++;
-            printblocks();
-        }
-        operation = rand()%2;
-        if(operation ==1){
-            mallocSize = rand()%64;
+        mallocSize = (rand()%64) + 1;
+        if (!canFree)
+        {
             ptr = malloc(mallocSize);
             mallocCounter++;
+            canFree++;
+            remainingSize -= mallocSize + sizeof(metaData);
+            if(mallocCounter >= 150)break;
             printblocks();
+            continue;
+        }
+        operation = rand()%2;
+        if(operation == 1 && (remainingSize - (mallocSize + sizeof(metaData))) > 0){
+            ptr = malloc(mallocSize);
+            mallocCounter++;
+            canFree++;
+            remainingSize -= mallocSize + sizeof(metaData);
+            if(mallocCounter >= 150)break;
         }
         else{
             metaData * a = blockPtr;
@@ -89,13 +108,14 @@ int main()
                     if(!(a->isFree))
                     {
                         free(++a);
+                        canFree--;
+                        remainingSize += (a->size) + sizeof(metaData);
                         break;
                     }
                     a = a->next;
                     }
-            mallocCounter--;
-            printblocks();
         }
+        printblocks();
     }
    freeall();
     }
@@ -111,6 +131,7 @@ int main()
         ptr = malloc(mallocSize);
         counter++;
     }
+    printblocks();
     freeall();
     }
 
