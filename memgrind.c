@@ -189,10 +189,8 @@ int main1()
 //            ptrF = my_malloc(1);
 //            mallocCounter++;
 //        }
-//        while(mallocCounterF > 0){
-//            if(mallocCounterF%2 ==0){
-//                my_free(ptrF);
-//            }
+//        while(mallocCounterF > (mallocCounterF/2){
+//                my_free(ptrF); 
 //            mallocCounterF --;
 //        }
 //        end = clock();
