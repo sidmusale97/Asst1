@@ -1,7 +1,10 @@
 #include<stdio.h>
 #include<stddef.h>
 #include "mymalloc.h"
-//
+#define malloc( x ) my_malloc( x, __FILE__, __LINE__ )
+#define free( x ) my_free( x, __FILE__, __LINE__ )
+static char myblock[5000];  //array size simulated
+metaData *blockPtr = (void*) myblock;  //sets pointer to first index in arrays
 void initialize(){
     blockPtr->size = 5000 - sizeof(metaData);
     blockPtr->isFree = 1;
@@ -19,7 +22,7 @@ void allocate(metaData *largeBlock, int requiredSize){
     largeBlock->next = newBlock; //large block is now "before" new block so its next node is new block
 }
 //
-void* my_malloc(int size)
+void* my_malloc(int size, char * File, int Line)
 {
     if(!blockPtr->size)initialize();//executes when the isFree value in the structure is NULL. This only happens once.
     metaData *current = blockPtr;
@@ -28,20 +31,18 @@ void* my_malloc(int size)
     if((current->size == size) && current->isFree)
     {
         current->isFree = 0;
-        printf("%s", "Space has been allocated\n");
         current++; //move the current pointer past all the metaData and have it point to beginning of the allocated space
         return (void *)current;
     }
     else if (current->size >(size + sizeof(metaData)))
     {
         allocate(current, size);
-        printf("%s", "Space has been allocated\n");
         current++; //move the current pointer past all the metaData and have it point to beginning of the allocated space
         return (void *)current;
     }
     current = current->next;
     }
-    puts("Not enough memory. Malloc error");
+    fprintf(stderr,"Error in file: %s Line: %d. Not Enough Space\n", File, Line);
     return NULL;
 }
 //
@@ -56,7 +57,6 @@ void merge(){
             prev->isFree = 1;
             current=current->next;
             prev->next = current;
-            printf("%s", "MERGED\n");
         }
         else
         {
@@ -66,19 +66,19 @@ void merge(){
     }
 
 }
-void my_free(void* p){
+void my_free(void* p, char * File, int Line){
     if(((void *)myblock > p) || ((void*)(myblock + 5000) < p))
     {
-        puts("invalid pointer");
-        return;
+        fprintf(stderr,"Error in file: %s on Line: %d. Cannot free pointer that was not allocated by malloc\n", File, Line);
+        exit(0);
     }
     else
     {
         metaData* current = p;
         current--;
         if(current-> isFree){
-            puts("Invalid Pointer");
-            return;
+           fprintf(stderr,"Error in file: %s on Line: %d. Pointer is already freed\n", File, Line);
+           exit(0);
         }
         current->isFree = 1;
         merge();
@@ -105,7 +105,7 @@ void freeall()
     {
         if(!(p->isFree))
         {
-            my_free(++p);
+            free(++p);
             p--;
         }
 

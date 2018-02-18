@@ -1,17 +1,8 @@
-//
-//  mymalloc.h
-//  Asst1
-//
-//  Created by Ridhima Sakhuja on 2/4/18.
-//  Copyright © 2018 Ridhima Sakhuja. All rights reserved.
-//
-
 
 #include <stdio.h>
 #include<stddef.h>
 
 
-static char myblock[5000];  //array size simulated
 
 typedef struct metaData{
     int size; //size of data
@@ -19,14 +10,14 @@ typedef struct metaData{
     struct metaData *next;  //pointer to next block
 }metaData;
 
-metaData *blockPtr = (void*) myblock;  //sets pointer to first index in array
 void initialize();
 void allocate(metaData *allocatedBlock, int requiredSize);
-void* my_malloc(int size);
+void* my_malloc(int size, char * File, int Line);
 void merge();
-void my_free(void * p);
+void my_free(void * p, char * File, int Line);
 void printblocks(void);
 void freeall();
+//void errorOut(char * file, int line);
 
 
 
