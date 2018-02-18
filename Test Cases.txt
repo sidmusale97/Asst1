@@ -4,9 +4,9 @@
 Workload E:
 
 
-In workload E, malloc is called 75 times in a loop, and in each loop iteration the memory size allocated increases by 1 byte. Example: 1st iteration - malloc(1), 2nd iteration - malloc(2)...nth iteration- malloc(n).
+In workload E, malloc is called a random number of times between 1-90 in a loop, and in each loop iteration the memory size allocated increases by 1 byte. Example: 1st iteration - malloc(1), 2nd iteration - malloc(2)...nth iteration- malloc(n).
 All of the blocks are kept track of throughout the time that malloc is being called. 
-Afterwards, free is called 75 time in a loop, such that during each iteration, one block is randomly freed. After 75 iterations, all blocks will be freed. 
+Afterwards, free is called  n a loop, such that during each iteration, one block is randomly freed. After all the iterations, all blocks will be freed. 
 
 
 Workload F:
