@@ -113,4 +113,19 @@ void freeall()
     }
 }
 
+int findMostFree()
+{
+    metaData * p = blockPtr->next;
+    int mostFree = blockPtr ->size;
+    while (p != NULL)
+    {
+        if(p->size > mostFree)
+        {
+           mostFree = p->size;
+        }
+        p = p->next;
+    }
+    return mostFree;
+}
+
 

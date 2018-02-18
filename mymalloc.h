@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include<stddef.h>
 
@@ -16,7 +17,7 @@ void merge();
 void my_free(void * p, char * File, int Line);
 void printblocks(void);
 void freeall();
-//void errorOut(char * file, int line);
+int findMostFree();
 
 
 
