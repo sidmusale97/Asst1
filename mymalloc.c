@@ -3,10 +3,14 @@
 #include "mymalloc.h"
 #define malloc( x ) my_malloc( x, __FILE__, __LINE__ )
 #define free( x ) my_free( x, __FILE__, __LINE__ )
-static char myblock[5000];  //array size simulated
+static char myblock[5012];  //array size simulated
 metaData *blockPtr = (void*) myblock;  //sets pointer to first index in arrays
+void merge();
+void initialize();
+int initFlag = 1;
+void allocate(metaData *allocatedBlock, int requiredSize);
 void initialize(){
-    blockPtr->size = 5000 - sizeof(metaData);
+    blockPtr->size = 5012 - sizeof(metaData);
     blockPtr->isFree = 1;
     blockPtr->next = NULL;
 }
@@ -24,7 +28,10 @@ void allocate(metaData *largeBlock, int requiredSize){
 //
 void* my_malloc(int size, char * File, int Line)
 {
-    if(!blockPtr->size)initialize();//executes when the isFree value in the structure is NULL. This only happens once.
+    if(initFlag){
+    initialize();//executes when the isFree value in the structure is NULL. This only happens once.
+    initFlag = 0;
+    }
     metaData *current = blockPtr;
     while(current != NULL)
     {
@@ -34,7 +41,7 @@ void* my_malloc(int size, char * File, int Line)
         current++; //move the current pointer past all the metaData and have it point to beginning of the allocated space
         return (void *)current;
     }
-    else if (current->size >(size + sizeof(metaData)))
+    else if (current->size >(size + sizeof(metaData)) && current ->isFree)
     {
         allocate(current, size);
         current++; //move the current pointer past all the metaData and have it point to beginning of the allocated space
@@ -52,11 +59,11 @@ void merge(){
     metaData *prev = blockPtr;
     while(current != NULL)
     {
-        if((current->isFree) && (prev->isFree)){
-            prev->size = prev->size + current->size + sizeof(metaData);
-            prev->isFree = 1;
-            current=current->next;
-            prev->next = current;
+        if((current->isFree) && (prev->isFree)){ //if adjacent free blocks are found they should be merged
+            prev->size = prev->size + current->size + sizeof(metaData); //previous block size is increase to include the block next to it
+            prev->isFree = 1;   //prev is freed
+            current=current->next;  //current is moved forward
+            prev->next = current;   //prev next must be updated
         }
         else
         {
@@ -67,18 +74,18 @@ void merge(){
 
 }
 void my_free(void* p, char * File, int Line){
-    if(((void *)myblock > p) || ((void*)(myblock + 5000) < p))
+    if(((void *)myblock > p) || ((void*)(myblock + 5012) < p)) //if pointer is not inbetween the memory addresses encompassing memory then its an invalid pointer
     {
         fprintf(stderr,"Error in file: %s on Line: %d. Cannot free pointer that was not allocated by malloc\n", File, Line);
-        exit(0);
+        return;
     }
     else
     {
         metaData* current = p;
         current--;
-        if(current-> isFree){
+        if(current-> isFree){ //if a pointer is already free it cannot be freed again
            fprintf(stderr,"Error in file: %s on Line: %d. Pointer is already freed\n", File, Line);
-           exit(0);
+           return;
         }
         current->isFree = 1;
         merge();
@@ -98,7 +105,7 @@ void printblocks()
     }
 }
 
-void freeall()
+void freeall()  //free all memory blocks
 {
     metaData * p = blockPtr;
     while (p != NULL)
@@ -128,4 +135,6 @@ int findMostFree()
     return mostFree;
 }
 
-
+metaData * getBlockPtr(){
+    return blockPtr;
+}
